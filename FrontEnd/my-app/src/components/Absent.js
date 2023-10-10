@@ -47,13 +47,13 @@ function Present() {
   const [stus, setStus] = useState([])
 
   useEffect(() => {
-    axios.get('http://localhost:8009/Morningstudents')
+    axios.get('http://localhost:8585/Morningstudents')
       .then(res => {
         setData(res.data)
         setRecords(res.data.filter(student => student.status === 0))
       }).catch(err => console.log(err))
 
-      axios.get('http://localhost:8009/logs')
+      axios.get('http://localhost:8585/logs')
   .then(response =>{
     const filteredData = response.data.filter(row => {
       const timeParts = row.Time.split(":");

@@ -11,7 +11,7 @@ const Morning = () => {
   const [data, setData] = useState([])
 
   useEffect(() => {
-    axios.get('http://localhost:8009/Morningstudents')
+    axios.get('http://localhost:8585/Morningstudents')
       .then(res => {
         setData(res.data)
         setRecords(res.data.filter(student => student.Batch === "Morning"))

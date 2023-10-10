@@ -81,25 +81,16 @@ const pdata = [
 ];
 
 const DashBoard = () => {
-  const [data, setData] = useState([])
-  const [stus, setStus] = useState([])
+  const [data, setData] = useState([]);
   const [records, setRecords] = useState([]);
-  
-  useEffect(() => {
-    // Fetch data from the "Morningstudents" database
-    axios
-      .get('http://localhost:8009/Morningstudents')
-      .then((res) => {
-        setData((prevData) => [...prevData, ...res.data]); // Merge with existing data
-      })
-      .catch((err) => console.log(err));
 
-    // Fetch data from the "Afternoonstudents" database
+  useEffect(() => {
+    // Fetch data from the "students" database
     axios
-      .get('http://localhost:8009/Afternoonstudents')
+      .get('http://localhost:8585/students')
       .then((res) => {
-        setData((prevData) => [...prevData, ...res.data]); // Merge with existing data
-        setRecords((prevRecords) => [...prevRecords, ...res.data]); // Set records to include all data
+        setData(res.data); // Set data for the morning batch
+        setRecords(res.data); // Set records to include all data
       })
       .catch((err) => console.log(err));
   }, []);
@@ -108,51 +99,13 @@ const DashBoard = () => {
   let abs = 0;
   let lat = 0;
 
-  data.map((stat) => {
+  data.forEach((stat) => {
     if (stat.status === 1) {
       pres++;
-    }
-    else if(stat.status === 0){
+    } else if (stat.status === 0) {
       abs++;
     }
   });
-
-  stus.map((stu) =>{
-    const timeParts=stu.Time.split(":");
-    const hour=parseInt(timeParts[0]);
-    const minute=parseInt(timeParts[1]);
-    if(hour >=9 && minute>30){
-      lat++;
-    }
-  })
-
-  // const [data, setData] = useState([])
-  // useEffect(() => {
-  //   axios.get('http://localhost:8009/students')
-  //     .then(res => {
-  //       setData(res.data)
-  //     }).catch(err => console.log(err))
-  // }, [])
-
-
-  // let pres = 0;
-  // data.forEach((stat) => {
-  //   if (stat.status === 1) {
-  //     pres++;
-  //   }
-  // });
-  // let abs = 0;
-  // data.forEach((stat) => {
-  //   if (stat.status === 0) {
-  //     abs++;
-  //   }
-  // });
-  // let lat = 0;
-  // data.forEach((stat) => {
-  //   if (stat.status === 'Late') {
-  //     lat++;
-  //   }
-  // });
 
   const filterChart = (month) => {
     console.log(month);

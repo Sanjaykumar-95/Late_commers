@@ -45,7 +45,7 @@ function Present() {
   useEffect(() => {
     // Fetch data from the "Morningstudents" database
     axios
-      .get('http://localhost:8009/Morningstudents')
+      .get('http://localhost:8585/Morningstudents')
       .then((res) => {
         setData((prevData) => [...prevData, ...res.data]); // Merge with existing data
       })
@@ -53,7 +53,7 @@ function Present() {
 
     // Fetch data from the "Afternoonstudents" database
     axios
-      .get('http://localhost:8009/Afternoonstudents')
+      .get('http://localhost:8585/Afternoonstudents')
       .then((res) => {
         setData((prevData) => [...prevData, ...res.data]); // Merge with existing data
         setRecords((prevRecords) => [...prevRecords, ...res.data]); // Set records to include all data

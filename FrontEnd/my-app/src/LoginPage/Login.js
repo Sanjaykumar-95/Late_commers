@@ -13,7 +13,7 @@ function Signin() {
     const [name, setName] = useState('')
     const [password, setPassword] = useState('')
     let [data, setData] = useState([]) // let data = []
-    let api = "http://localhost:8009/logins";
+    let api = "http://localhost:8585/logins";
     useEffect(() => {
         axios.get(api).then((response) => {
             console.log(response.data)

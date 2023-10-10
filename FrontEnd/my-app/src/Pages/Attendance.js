@@ -16,7 +16,7 @@ const Attendance = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.get(`http://localhost:8009/students/${rno}`);
+      const response = await axios.get(`http://localhost:8585/students/${rno}`);
       const data = response.data;
       setValues({
         RollNo: data.RollNo,
