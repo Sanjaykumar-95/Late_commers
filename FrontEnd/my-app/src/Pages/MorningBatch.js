@@ -5,6 +5,7 @@ import XLSX from 'xlsx';
 import DataTable from 'react-data-table-component'
 import TextField from '@material-ui/core/TextField';
 import Sidebar from '../components/Sidebar';
+import "./Morning.css";
 
 const Morning = () => {
 
@@ -51,16 +52,6 @@ const Morning = () => {
         selector:row => row.Course,
         sortable:true
     }
-    // {
-    //       name:"Time",
-    //       selector:row => row.Time,
-    //       sortable:true
-    // },
-    // {
-    //   name:"Status",
-    //   selector:"formattedStatus",
-    //   sortable:true
-    // }
   ];
 
   const [selectedCourse, setSelectedCourse] = useState('');

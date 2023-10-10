@@ -102,8 +102,18 @@ const DashBoard = () => {
   data.forEach((stat) => {
     if (stat.status === 1) {
       pres++;
-    } else if (stat.status === 0) {
-      abs++;
+    }
+  });
+
+  data.map((stu) => {
+    const timeParts = stu.Time?.split(":");
+    if (timeParts) {
+      const hour = parseInt(timeParts[0]);
+      const minute = parseInt(timeParts[1]);
+      if ((hour >= 1 && minute > 30) || (hour >= 9 && minute > 30)) {
+        lat++;
+      }
+      else if(hour === 0 && minute === 0) abs++;
     }
   });
 

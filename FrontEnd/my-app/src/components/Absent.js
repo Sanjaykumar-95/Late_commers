@@ -7,14 +7,10 @@ import DataTable from 'react-data-table-component'
 import XLSX from 'xlsx';
 import Sidebar from './Sidebar';
 
-function Present() {
+function Absent() {
 
   const columns = [
-    // {
-    //   name:"S.No",
-    //   selector:row => row.sno,
-    //   sortable:true
-    // },
+
     {
         name:'Roll No',
         selector:row => row.RollNo,
@@ -34,37 +30,30 @@ function Present() {
         name:"Course",
         selector:row => row.Course,
         sortable:true
-    },
-    {
-          name:"Time",
-          selector:row => row.Time,
-          sortable:true
     }
   ];
 
 
-  const [data, setData] = useState([])
-  const [stus, setStus] = useState([])
+  const [data, setData] = useState([]);
+  const [records, setRecords] = useState([]);
+  const [absentCount, setAbsentCount] = useState(0);
 
   useEffect(() => {
-    axios.get('http://localhost:8585/Morningstudents')
-      .then(res => {
-        setData(res.data)
-        setRecords(res.data.filter(student => student.status === 0))
-      }).catch(err => console.log(err))
-
-      axios.get('http://localhost:8585/logs')
-  .then(response =>{
-    const filteredData = response.data.filter(row => {
-      const timeParts = row.Time.split(":");
-      const hour = parseInt(timeParts[0]);
-      const minute = parseInt(timeParts[1]);
-      return hour >= 9 && minute > 30;
-    });
-    setStus(response.data);
-  })
+    // Fetch data from the "students" database
+    axios
+      .get('http://localhost:8585/students')
+      .then((res) => {
+        // Filter students whose time is "00:00"
+        const filteredStudents = res.data.filter((student) =>
+          student.Time === "0:00"
+        );
+        setData(res.data);
+        setRecords(filteredStudents);
+        setAbsentCount(filteredStudents.length);
+      })
+      .catch((err) => console.log(err));
   }, []);
-  
+
 
   let pres = 0;
   let abs = 0;
@@ -74,29 +63,28 @@ function Present() {
     if (stat.status === 1) {
       pres++;
     }
-    else if(stat.status === 0){
-      abs++;
+  });
+
+  data.map((stu) => {
+    const timeParts = stu.Time?.split(":");
+    if (timeParts) {
+      const hour = parseInt(timeParts[0]);
+      const minute = parseInt(timeParts[1]);
+      if ((hour >= 1 && minute > 30) || (hour >= 9 && minute > 30)) {
+        lat++;
+      }
+      else if(hour === 0 && minute === 0) abs++;
     }
   });
 
-  stus.map((stu) =>{
-    const timeParts=stu.Time.split(":");
-    const hour=parseInt(timeParts[0]);
-    const minute=parseInt(timeParts[1]);
-    if(hour >=9 && minute>30){
-      lat++;
-    }
-  })
-
-
-  const [records,setRecords] = useState([]);
-
-  function handleFilter(event){
-    const newData =data.filter(row => {
-      return row.RollNo.toLowerCase().includes(event.target.value.toLowerCase())
-    })
-    setRecords(newData.filter(student => student.status === 0))
-  }
+  const handleFilter = (event) => {
+    const filterValue = event.target.value.toLowerCase();
+    const filteredRecords = data.filter((row) =>
+      row.RollNo.toLowerCase().includes(filterValue)
+    );
+    setRecords(filteredRecords);
+  };
+  
 
   const downloadExcel = () => {
     const workSheet = XLSX.utils.json_to_sheet(records);
@@ -235,4 +223,4 @@ function Present() {
 
 }
 
-export default Present;
+export default Absent;

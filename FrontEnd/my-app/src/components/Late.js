@@ -11,11 +11,6 @@ import Sidebar from './Sidebar';
 function Late() {
 
   const columns = [
-    // {
-    //   name:"S.No",
-    //   selector:row => row.sno,
-    //   sortable:true
-    // },
     {
       name: 'Roll No',
       selector: row => row.RollNo,
@@ -43,28 +38,34 @@ function Late() {
     }
   ];
 
-
-  const [data, setData] = useState([])
-  const [stus, setStus] = useState([])
+  const [data, setData] = useState([]);
+  const [records, setRecords] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:8585/Morningstudents')
-      .then(res => {
-        setData(res.data)
-      }).catch(err => console.log(err))
-
-    axios.get('http://localhost:8585/logs')
-      .then(response => {
-        const filteredData = response.data.filter(row => {
-          const timeParts = row.Time.split(":");
-          const hour = parseInt(timeParts[0]);
-          const minute = parseInt(timeParts[1]);
-          return hour >= 9 && minute > 30;
+    // Fetch data from the "students" database
+    axios
+      .get('http://localhost:8585/students')
+      .then((res) => {
+        setData(res.data);
+        // Filter students whose status is 0 and time is late
+        const filteredLateStudents = res.data.filter((student) => {
+          if (student.status === 0) {
+            const timeParts = student.Time?.split(":");
+            if (timeParts) {
+              const hour = parseInt(timeParts[0]);
+              const minute = parseInt(timeParts[1]);
+              return (hour >= 1 && minute > 30) || (hour >= 9 && minute > 30);
+            }
+          }
+          return false;
         });
-        setRecords(filteredData);
-        setStus(response.data);
+        setFilteredData(filteredLateStudents);
+        setRecords(filteredLateStudents);
       })
+      .catch((err) => console.log(err));
   }, []);
+
 
   let pres = 0;
   let abs = 0;
@@ -74,34 +75,25 @@ function Late() {
     if (stat.status === 1) {
       pres++;
     }
-    else if (stat.status === 0) {
-      abs++;
+  });
+
+  data.map((stu) => {
+    const timeParts = stu.Time?.split(":");
+    if (timeParts) {
+      const hour = parseInt(timeParts[0]);
+      const minute = parseInt(timeParts[1]);
+      if ((hour >= 1 && minute > 30) || (hour >= 9 && minute > 30)) {
+        lat++;
+      }
+      else if(hour === 0 && minute === 0) abs++;
     }
   });
 
-  stus.map((stu) => {
-    const timeParts = stu.Time.split(":");
-    const hour = parseInt(timeParts[0]);
-    const minute = parseInt(timeParts[1]);
-    if (hour >= 9 && minute > 30) {
-      lat++;
-    }
-  })
-
-
-  const [records, setRecords] = useState([]);
-
   function handleFilter(event) {
-    const filteredData = stus.filter(row => {
-      const timeParts = row.Time.split(":");
-      const hour = parseInt(timeParts[0]);
-      const minute = parseInt(timeParts[1]);
-      return (
-        row.RollNo.toLowerCase().includes(event.target.value.toLowerCase()) &&
-        hour >= 9 && minute > 30
-      );
+    const newData = data.filter((row) => {
+      return row.RollNo.toLowerCase().includes(event.target.value.toLowerCase()) && row.status === 0;
     });
-    setRecords(filteredData);
+    setRecords(newData);
   }
 
 

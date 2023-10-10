@@ -29,37 +29,26 @@ function Present() {
         name:"Course",
         selector:(row) => row.Course,
         sortable:true,
-    },
-    {
-          name:"Time",
-          selector:(row) => row.Time,
-          sortable:true,
     }
   ];
 
 
-  const [data, setData] = useState([])
-  const [stus, setStus] = useState([])
+  const [data, setData] = useState([]);
   const [records, setRecords] = useState([]);
-  
-  useEffect(() => {
-    // Fetch data from the "Morningstudents" database
-    axios
-      .get('http://localhost:8585/Morningstudents')
-      .then((res) => {
-        setData((prevData) => [...prevData, ...res.data]); // Merge with existing data
-      })
-      .catch((err) => console.log(err));
+  const [filteredData, setFilteredData] = useState([]);
 
-    // Fetch data from the "Afternoonstudents" database
+  useEffect(() => {
+    // Fetch data from the "students" database
     axios
-      .get('http://localhost:8585/Afternoonstudents')
+      .get('http://localhost:8585/students')
       .then((res) => {
-        setData((prevData) => [...prevData, ...res.data]); // Merge with existing data
-        setRecords((prevRecords) => [...prevRecords, ...res.data]); // Set records to include all data
+        setData(res.data);
+        setFilteredData(res.data.filter((student) => student.status === 1));
+        setRecords(res.data.filter((student) => student.status === 1));
       })
       .catch((err) => console.log(err));
   }, []);
+
 
   let pres = 0;
   let abs = 0;
@@ -69,26 +58,28 @@ function Present() {
     if (stat.status === 1) {
       pres++;
     }
-    else if(stat.status === 0){
-      abs++;
+  });
+
+  data.map((stu) => {
+    const timeParts = stu.Time?.split(":");
+    if (timeParts) {
+      const hour = parseInt(timeParts[0]);
+      const minute = parseInt(timeParts[1]);
+      if ((hour >= 1 && minute > 30) || (hour >= 9 && minute > 30)) {
+        lat++;
+      }
+      else if(hour === 0 && minute === 0) abs++;
     }
   });
 
-  stus.map((stu) =>{
-    const timeParts=stu.Time.split(":");
-    const hour=parseInt(timeParts[0]);
-    const minute=parseInt(timeParts[1]);
-    if(hour >=9 && minute>30){
-      lat++;
-    }
-  })
-
-  function handleFilter(event){
-    const newData =data.filter(row => {
-      return row.RollNo.toLowerCase().includes(event.target.value.toLowerCase())
-    })
-    setRecords(newData.filter(student => student.status === 1))
+  function handleFilter(event) {
+    const newData = data.filter((row) => {
+      return row.RollNo.toLowerCase().includes(event.target.value.toLowerCase()) && row.status === 1;
+    });
+    setRecords(newData);
   }
+  
+
 
   const downloadExcel = () => {
     const workSheet = XLSX.utils.json_to_sheet(records);

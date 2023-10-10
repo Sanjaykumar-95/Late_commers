@@ -135,10 +135,26 @@ server.get('/students/:RollNo', (req, res) => {
 
 //Students Data
 server.get('/students', (req, res) => {
-  const collection = db.get('TabelData');
-  collection.find({}).then((docs1) => {
+  const collection = db.get('Studentdetails');
+  collection.find({}).then((docs2) => {
     res.setHeader('Content-Type', 'application/json');
-    res.json(docs1);
+    res.json(docs2);
+  });
+});
+
+server.get('/Morningstudents', (req, res) => {
+  const collection = db.get('MorningBatch');
+  collection.find({}).then((Mdocs) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.json(Mdocs);
+  });
+});
+
+server.get('/Afternoonstudents', (req, res) => {
+  const collection = db.get('AfternoonBatch');
+  collection.find({}).then((Adocs) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.json(Adocs);
   });
 });
 

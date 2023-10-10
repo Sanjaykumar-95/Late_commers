@@ -48,7 +48,15 @@ function Trainees() {
       name:"Status",
       selector:row => row.status,
       sortable:true,
-      cell: (row) => row.status === 1 ? "Present" : "Absent",
+      cell: (row) => {
+        if (row.status === 1) {
+          return 'Present';
+        } else if (row.Time === '0:00') {
+          return 'Absent';
+        } else {
+          return 'Late';
+        }
+      }
     }
   ];
 
@@ -70,13 +78,24 @@ function Trainees() {
   let abs = 0;
   let lat = 0;
 
-  data.forEach((stat) => {
+  data.map((stat) => {
     if (stat.status === 1) {
       pres++;
-    } else if (stat.status === 0) {
-      abs++;
     }
   });
+
+  data.map((stu) => {
+    const timeParts = stu.Time?.split(":");
+    if (timeParts) {
+      const hour = parseInt(timeParts[0]);
+      const minute = parseInt(timeParts[1]);
+      if ((hour >= 1 && minute > 30) || (hour >= 9 && minute > 30)) {
+        lat++;
+      }
+      else if(hour === 0 && minute === 0) abs++;
+    }
+  });
+  
 
   const handleFilter = (event) => {
     const newData = data.filter((row) => {
