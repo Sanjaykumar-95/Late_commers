@@ -34,35 +34,46 @@ const Afternoon = () => {
         selector:row => row.Course,
         sortable:true
     }
-    // {
-    //       name:"Time",
-    //       selector:row => row.Time,
-    //       sortable:true
-    // },
-    // {
-    //   name:"Status",
-    //   selector:row => row.status,
-    //   sortable:true
-    // }
   ];
 
   const [data, setData] = useState([])
 
   useEffect(() => {
-    axios.get('http://localhost:8585/Afternoonstudents')
+    axios.get('http://localhost:8585/students?batch=afternoon')
       .then(res => {
         setData(res.data)
         setRecords(res.data.filter(student => student.Batch === "Afternoon"))
       }).catch(err => console.log(err))
   }, []);
 
-  const [records,setRecords] = useState([]);
 
-  function handleFilter(event){
-    const newData =data.filter(row => {
-      return row.Name.toLowerCase().includes(event.target.value.toLowerCase())
-    })
-    setRecords(newData.filter(student => student.Batch === "Afternoon"))
+  const formattedData = data.map(row => {
+    return {
+      ...row,
+      formattedStatus: row.status === 1 ? "Present" : "Absent"
+    }
+  });
+
+  const [selectedCourse, setSelectedCourse] = useState('');
+  const [records,setRecords] = useState([]);
+  
+
+  function handleFilter(event) {
+    setSelectedCourse(event.target.value);
+  
+    const filteredData = formattedData.filter((row) => {
+      if (event.target.value === "All") {
+        return row.Batch === 'Afternoon';
+      }
+      
+      return (
+        (row.Course.toLowerCase().includes(event.target.value.toLowerCase()) ||
+          row.Name.toLowerCase().includes(event.target.value.toLowerCase()) ||
+          row.RollNo.toLowerCase().includes(event.target.value.toLowerCase())) &&
+        row.Batch === 'Afternoon'
+      );
+    });
+    setRecords(filteredData);
   }
 
 
@@ -91,7 +102,7 @@ const Afternoon = () => {
                         <div class="input-group-addon">
                           <i class="fa fa-black-tie" aria-hidden="true"></i>
                         </div>
-                        <select name="number" class="form-control" /*style={{ borderColor: 'transparent' }}*/>
+                        <select name="number" class="form-control" onChange={handleFilter} value={selectedCourse}>
                           <option selected>Courses</option>
                           <option>FSD</option>
                           <option>Devops</option>
@@ -120,18 +131,7 @@ const Afternoon = () => {
                     </div>
                   </div>
 
-                  {/* <select style={{ borderColor: 'transparent' }}>
-
-
-                <option value="">All</option>
-                <option value="">Late</option>
-
-                <option value="">Permission</option>
-
-
-              </select> */}
                 </td>
-
                 <td>
                   <TextField
                     id="date"

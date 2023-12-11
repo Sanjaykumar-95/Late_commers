@@ -131,32 +131,20 @@ server.get('/students/:RollNo', (req, res) => {
   });
 });
 
-
-
-//Students Data
+// Students Data with Batch filter
 server.get('/students', (req, res) => {
   const collection = db.get('Studentdetails');
-  collection.find({}).then((docs2) => {
+  const { batch } = req.query; // Extract batch parameter from query
+
+  // If batch parameter is provided, filter by batch
+  const query = batch ? { Batch: { $regex: new RegExp(`^${batch.charAt(0).toUpperCase()}${batch.slice(1).toLowerCase()}`) } } : {};
+
+  collection.find(query).then((docs2) => {
     res.setHeader('Content-Type', 'application/json');
     res.json(docs2);
   });
 });
 
-server.get('/Morningstudents', (req, res) => {
-  const collection = db.get('MorningBatch');
-  collection.find({}).then((Mdocs) => {
-    res.setHeader('Content-Type', 'application/json');
-    res.json(Mdocs);
-  });
-});
-
-server.get('/Afternoonstudents', (req, res) => {
-  const collection = db.get('AfternoonBatch');
-  collection.find({}).then((Adocs) => {
-    res.setHeader('Content-Type', 'application/json');
-    res.json(Adocs);
-  });
-});
 
 server.listen(8585, () => {
   console.log('server running on port....')

@@ -48,51 +48,45 @@ function Trainees() {
       name:"Status",
       selector:row => row.status,
       sortable:true,
-      cell: (row) => {
-        if (row.status === 1) {
-          return 'Present';
-        } else if (row.Time === '0:00') {
-          return 'Absent';
-        } else {
-          return 'Late';
-        }
-      }
+      cell: (row) => row.status === 1 ? "Present" : "Absent",
     }
   ];
 
   const [data, setData] = useState([]);
   const [records, setRecords] = useState([]);
+  const [lat, setLateCount] = useState(0);
 
   useEffect(() => {
     // Fetch data from the "students" database
     axios
       .get('http://localhost:8585/students')
       .then((res) => {
-        setData(res.data); // Set data for the morning batch
-        setRecords(res.data); // Set records to include all data
+        const allStudents = res.data;
+        const presentStudents = allStudents.filter((student) => student.status === 0);
+        const lateStudents = presentStudents.filter((student) => {
+          if (student.Time) {
+            const timeParts = student.Time.split(":");
+            const hour = parseInt(timeParts[0]);
+            const minute = parseInt(timeParts[1]);
+            return (hour >= 9 && minute >= 30) || (hour >= 1 && minute >= 30);
+          }
+          return false;
+        });
+        setData(allStudents); // Set all students
+        setRecords(presentStudents); // Set present students
+        setLateCount(lateStudents.length);
       })
       .catch((err) => console.log(err));
   }, []);
 
   let pres = 0;
   let abs = 0;
-  let lat = 0;
 
-  data.map((stat) => {
+  data.forEach((stat) => {
     if (stat.status === 1) {
       pres++;
-    }
-  });
-
-  data.map((stu) => {
-    const timeParts = stu.Time?.split(":");
-    if (timeParts) {
-      const hour = parseInt(timeParts[0]);
-      const minute = parseInt(timeParts[1]);
-      if ((hour >= 1 && minute > 30) || (hour >= 9 && minute > 30)) {
-        lat++;
-      }
-      else if(hour === 0 && minute === 0) abs++;
+    } else if (stat.status === 0) {
+      abs++;
     }
   });
   
@@ -229,7 +223,7 @@ function Trainees() {
             <div className='row'>
             <DataTable columns={columns}
             customStyles={tableCustomStyles}
-            data={records}
+            data={data}
             fixedHeader
             pagination
             ></DataTable>

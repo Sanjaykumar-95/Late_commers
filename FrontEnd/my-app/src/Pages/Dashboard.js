@@ -83,6 +83,7 @@ const pdata = [
 const DashBoard = () => {
   const [data, setData] = useState([]);
   const [records, setRecords] = useState([]);
+  const [lat, setLateCount] = useState(0);
 
   useEffect(() => {
     // Fetch data from the "students" database
@@ -91,29 +92,30 @@ const DashBoard = () => {
       .then((res) => {
         setData(res.data); // Set data for the morning batch
         setRecords(res.data); // Set records to include all data
+
+        const lateStudents = res.data.filter((student) => {
+          if (student.Time) {
+            const timeParts = student.Time.split(":");
+            const hour = parseInt(timeParts[0]);
+            const minute = parseInt(timeParts[1]);
+            return (hour >= 9 && minute >= 30) || (hour >= 1 && minute >= 30);
+          }
+          return false;
+        });
+        setLateCount(lateStudents.length)
       })
       .catch((err) => console.log(err));
   }, []);
 
   let pres = 0;
   let abs = 0;
-  let lat = 0;
+  // let lat = 0;
 
   data.forEach((stat) => {
     if (stat.status === 1) {
       pres++;
-    }
-  });
-
-  data.map((stu) => {
-    const timeParts = stu.Time?.split(":");
-    if (timeParts) {
-      const hour = parseInt(timeParts[0]);
-      const minute = parseInt(timeParts[1]);
-      if ((hour >= 1 && minute > 30) || (hour >= 9 && minute > 30)) {
-        lat++;
-      }
-      else if(hour === 0 && minute === 0) abs++;
+    } else if (stat.status === 0) {
+      abs++;
     }
   });
 

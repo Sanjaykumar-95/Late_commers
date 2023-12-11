@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { all } from "axios";
 import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
@@ -29,57 +29,62 @@ function Present() {
         name:"Course",
         selector:(row) => row.Course,
         sortable:true,
+    },
+    {
+          name:"Time",
+          selector:(row) => row.Time,
+          sortable:true,
     }
   ];
 
 
-  const [data, setData] = useState([]);
+  const [data, setData] = useState([])
   const [records, setRecords] = useState([]);
-  const [filteredData, setFilteredData] = useState([]);
+  const [lat, setLateCount] = useState(0);
 
   useEffect(() => {
     // Fetch data from the "students" database
     axios
       .get('http://localhost:8585/students')
       .then((res) => {
-        setData(res.data);
-        setFilteredData(res.data.filter((student) => student.status === 1));
-        setRecords(res.data.filter((student) => student.status === 1));
+        const allStudents = res.data;
+        const presentStudents = allStudents.filter((student) => student.status === 1);
+        const lateStudents = allStudents.filter((student) => {
+          if (student.Time) {
+            const timeParts = student.Time.split(":");
+            const hour = parseInt(timeParts[0]);
+            const minute = parseInt(timeParts[1]);
+            return (hour >= 9 && minute >= 30) || (hour >= 1 && minute >= 30);
+          }
+          return false;
+        });
+        setData(allStudents); // Set all students
+        setRecords(presentStudents); // Set present students
+        setLateCount(lateStudents.length);
       })
       .catch((err) => console.log(err));
   }, []);
 
-
   let pres = 0;
   let abs = 0;
-  let lat = 0;
 
   data.map((stat) => {
     if (stat.status === 1) {
       pres++;
     }
-  });
-
-  data.map((stu) => {
-    const timeParts = stu.Time?.split(":");
-    if (timeParts) {
-      const hour = parseInt(timeParts[0]);
-      const minute = parseInt(timeParts[1]);
-      if ((hour >= 1 && minute > 30) || (hour >= 9 && minute > 30)) {
-        lat++;
-      }
-      else if(hour === 0 && minute === 0) abs++;
+    else if(stat.status === 0){
+      abs++;
     }
   });
 
   function handleFilter(event) {
-    const newData = data.filter((row) => {
-      return row.RollNo.toLowerCase().includes(event.target.value.toLowerCase()) && row.status === 1;
-    });
-    setRecords(newData);
+    const filterText = event.target.value.toLowerCase();
+    const filteredData = data.filter(
+      (student) => student.RollNo.toLowerCase().includes(filterText) && student.status === 1
+    );
+    setRecords(filteredData);
   }
   
-
 
   const downloadExcel = () => {
     const workSheet = XLSX.utils.json_to_sheet(records);

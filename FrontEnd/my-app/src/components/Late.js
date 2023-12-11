@@ -11,6 +11,11 @@ import Sidebar from './Sidebar';
 function Late() {
 
   const columns = [
+    // {
+    //   name:"S.No",
+    //   selector:row => row.sno,
+    //   sortable:true
+    // },
     {
       name: 'Roll No',
       selector: row => row.RollNo,
@@ -38,34 +43,30 @@ function Late() {
     }
   ];
 
-  const [data, setData] = useState([]);
+
+  const [data, setData] = useState([])
   const [records, setRecords] = useState([]);
-  const [filteredData, setFilteredData] = useState([]);
 
   useEffect(() => {
     // Fetch data from the "students" database
     axios
       .get('http://localhost:8585/students')
       .then((res) => {
-        setData(res.data);
-        // Filter students whose status is 0 and time is late
-        const filteredLateStudents = res.data.filter((student) => {
-          if (student.status === 0) {
-            const timeParts = student.Time?.split(":");
-            if (timeParts) {
-              const hour = parseInt(timeParts[0]);
-              const minute = parseInt(timeParts[1]);
-              return (hour >= 1 && minute > 30) || (hour >= 9 && minute > 30);
-            }
-          }
-          return false;
-        });
-        setFilteredData(filteredLateStudents);
-        setRecords(filteredLateStudents);
+        const allStudents = res.data;
+        const filteredStudents = allStudents.filter((student) => {
+        if (student.status === 0 && student.Time) {
+          const timeParts = student.Time.split(":");
+          const hour = parseInt(timeParts[0]);
+          const minute = parseInt(timeParts[1]);
+          return (hour >= 9 && minute >= 30) || (hour >= 1 && minute >= 30);
+        }
+        return false;
+      });
+      setData(allStudents); // Set all students
+      setRecords(filteredStudents);
       })
       .catch((err) => console.log(err));
   }, []);
-
 
   let pres = 0;
   let abs = 0;
@@ -75,26 +76,28 @@ function Late() {
     if (stat.status === 1) {
       pres++;
     }
-  });
-
-  data.map((stu) => {
-    const timeParts = stu.Time?.split(":");
-    if (timeParts) {
-      const hour = parseInt(timeParts[0]);
-      const minute = parseInt(timeParts[1]);
-      if ((hour >= 1 && minute > 30) || (hour >= 9 && minute > 30)) {
-        lat++;
-      }
-      else if(hour === 0 && minute === 0) abs++;
+    else if(stat.status === 0){
+      abs++;
     }
   });
 
   function handleFilter(event) {
-    const newData = data.filter((row) => {
-      return row.RollNo.toLowerCase().includes(event.target.value.toLowerCase()) && row.status === 0;
+    const filterText = event.target.value.toLowerCase();
+    const filteredData = data.filter((student) => {
+      if (student.status === 0 && student.Time) {
+        const timeParts = student.Time.split(":");
+        const hour = parseInt(timeParts[0]);
+        const minute = parseInt(timeParts[1]);
+        return (
+          student.RollNo.toLowerCase().includes(filterText) &&
+          ((hour >= 9 && minute >= 30) || (hour >= 1 && minute >= 30))
+        );
+      }
+      return false;
     });
-    setRecords(newData);
+    setRecords(filteredData);
   }
+  
 
 
   const downloadExcel = () => {
@@ -171,7 +174,7 @@ function Late() {
           <div className="col-lg-3 col-6" id='all'>
             <div className="small-box" style={{ backgroundColor: "#332D2D" }}>
               <div class="inner">
-                <h3>{lat}</h3>
+                <h3>{records.length}</h3>
                 <p>Late</p>
               </div>
 

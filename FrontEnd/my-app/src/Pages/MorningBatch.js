@@ -5,14 +5,13 @@ import XLSX from 'xlsx';
 import DataTable from 'react-data-table-component'
 import TextField from '@material-ui/core/TextField';
 import Sidebar from '../components/Sidebar';
-import "./Morning.css";
 
 const Morning = () => {
 
   const [data, setData] = useState([])
 
   useEffect(() => {
-    axios.get('http://localhost:8585/Morningstudents')
+    axios.get('http://localhost:8585/students?batch=morning')
       .then(res => {
         setData(res.data)
         setRecords(res.data.filter(student => student.Batch === "Morning"))
@@ -27,11 +26,6 @@ const Morning = () => {
   });
 
   const columns = [
-    // {
-    //   name:"S.No",
-    //   selector:row => row.sno,
-    //   sortable:true
-    // },
     {
         name:'Roll No',
         selector:row => row.RollNo,
@@ -105,7 +99,7 @@ const Morning = () => {
                         </div>
 
                         <select name="number" class="form-control" onChange={handleFilter} value={selectedCourse}>
-                          <option selected>All</option>
+                          <option selected>Courses</option>
                           <option>FSD</option>
                           <option>Devops</option>
                           <option>ML</option>
@@ -133,17 +127,6 @@ const Morning = () => {
                       </div>
                     </div>
                   </div>
-
-                  {/* <select style={{ borderColor: 'transparent' }}>
-
-
-                <option value="">All</option>
-                <option value="">Late</option>
-
-                <option value="">Permission</option>
-
-
-              </select> */}
                 </td>
 
                 <td>
