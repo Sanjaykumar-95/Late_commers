@@ -1,0 +1,242 @@
+[{
+  "_id": {
+    "$oid": "642fbb4b0674ff85c0126b23"
+  },
+  "RollNo": "20a91a0571",
+  "Name": "Abhishek",
+  "Batch": "Morning",
+  "Course": "Devops",
+  "status": 1,
+  "Time": "9:25"
+},
+{
+  "_id": {
+    "$oid": "642fbbe5b07aea3a94440487"
+  },
+  "RollNo": "20a91a0587",
+  "Name": "Jitesh",
+  "Batch": "Morning",
+  "Course": "Devops",
+  "status": 1,
+  "Time": "9:28"
+},
+{
+  "_id": {
+    "$oid": "642fbc32a2d55cac90e88f5e"
+  },
+  "RollNo": "20a91a0595",
+  "Name": "Sanjay",
+  "Batch": "Morning",
+  "Course": "FSD",
+  "status": 1,
+  "Time": "9:20"
+},
+{
+  "_id": {
+    "$oid": "64301a91ddd1324cd4ee0032"
+  },
+  "RollNo": "20a91a05C1",
+  "Name": "Vinnetha",
+  "Batch": "Morning",
+  "Course": "FSD",
+  "status": 1,
+  "Time": "9:25"
+},
+{
+  "_id": {
+    "$oid": "643055d7fdb4ff87cc48f6c3"
+  },
+  "RollNo": "20a91a0583",
+  "Name": "Mukesh",
+  "Batch": "Morning",
+  "Course": "Devops",
+  "status": 0,
+  "Time": "9:35"
+},
+{
+  "_id": {
+    "$oid": "643bdb098468d32b5c17f89f"
+  },
+  "RollNo": "20a91a0501",
+  "Name": "Akash",
+  "Batch": "Morning",
+  "Course": "Devops",
+  "status": 1,
+  "Time": "9:20"
+},
+{
+  "_id": {
+    "$oid": "64428053933f9670b8601643"
+  },
+  "RollNo": "20a91a05C4",
+  "Name": "Nithin",
+  "Batch": "Morning",
+  "Course": "Devops",
+  "status": 0,
+  "Time": "9:40"
+},
+{
+  "_id": {
+    "$oid": "644280a223aff43838cdc0af"
+  },
+  "RollNo": "20a91a0596",
+  "Name": "Sai Kumar",
+  "Batch": "Morning",
+  "Course": "FSD",
+  "status": 1,
+  "Time": "9:29"
+},
+{
+  "_id": {
+    "$oid": "6520e9ab5e4929264ea12ce9"
+  },
+  "RollNo": "20a91a0571",
+  "Name": "Raaman",
+  "Batch": "Morning",
+  "Course": "FSD",
+  "status": 0,
+  "Time": "9:40"
+},
+{
+  "_id": {
+    "$oid": "6524a3e5adbc80248e60cf5a"
+  },
+  "RollNo": "20a9105h6",
+  "Name": "Abhiram",
+  "Batch": "Afternoon",
+  "Course": "FSD",
+  "status": 1,
+  "Time": "9:20"
+},
+{
+  "_id": {
+    "$oid": "6524a3eeadbc80248e60cf5b"
+  },
+  "RollNo": "20a91a05g9",
+  "Name": "Akash",
+  "Batch": "Afternoon",
+  "Course": "Devops",
+  "status": 1,
+  "Time": "9:28"
+},
+{
+  "_id": {
+    "$oid": "6524a3f3adbc80248e60cf5c"
+  },
+  "RollNo": "20a91a05j6",
+  "Name": "Kowshik",
+  "Batch": "Afternoon",
+  "Course": "FSD",
+  "status": 1,
+  "Time": "9:25"
+},
+{
+  "_id": {
+    "$oid": "6524a3faadbc80248e60cf5d"
+  },
+  "RollNo": "20a91a05f8",
+  "Name": "Jhasi",
+  "Batch": "Afternoon",
+  "Course": "FSD",
+  "status": 1,
+  "Time": "9:29"
+},
+{
+  "_id": {
+    "$oid": "6524a400adbc80248e60cf5e"
+  },
+  "RollNo": "20a91a05k3",
+  "Name": "Varma",
+  "Batch": "Afternoon",
+  "Course": "Devops",
+  "status": 0,
+  "Time": "1:30"
+},
+{
+  "_id": {
+    "$oid": "6524a40badbc80248e60cf5f"
+  },
+  "RollNo": "20a91a5h3",
+  "Name": "Himanth",
+  "Batch": "Afternoon",
+  "Course": "Devops",
+  "status": 0,
+  "Time": "1:30"
+},
+{
+  "_id": {
+    "$oid": "6524a411adbc80248e60cf60"
+  },
+  "RollNo": "20a91a05f4",
+  "Name": "Nithya",
+  "Batch": "Afternoon",
+  "Course": "Devops",
+  "status": 0,
+  "Time": "1:35"
+},
+{
+  "_id": {
+    "$oid": "6524a416adbc80248e60cf61"
+  },
+  "RollNo": "20a91a05h6",
+  "Name": "Sai",
+  "Batch": "Afternoon",
+  "Course": "FSD",
+  "status": 1,
+  "Time": "9:15"
+},
+{
+  "_id": {
+    "$oid": "6524dfd5adbc80248e60cf77"
+  },
+  "RollNo": "20a91a05h7",
+  "Name": "Ajay",
+  "Batch": "Morning",
+  "Course": "FSD",
+  "status": 0,
+  "Time": "NA"
+},
+{
+  "_id": {
+    "$oid": "6524e00badbc80248e60cf78"
+  },
+  "RollNo": "20a91a05k7",
+  "Name": "Akhil",
+  "Batch": "Afternoon",
+  "Course": "Devops",
+  "status": 0,
+  "Time": "NA"
+},
+{
+  "_id": {
+    "$oid": "6524e00dadbc80248e60cf79"
+  },
+  "RollNo": "20a91a05l8",
+  "Name": "sarath",
+  "Batch": "Morning",
+  "Course": "Devops",
+  "status": 0,
+  "Time": "NA"
+},
+{
+  "_id": {
+    "$oid": "6524e00fadbc80248e60cf7a"
+  },
+  "RollNo": "20a91a0587",
+  "Name": "Jitesh",
+  "Batch": "Morning",
+  "Course": "Devops",
+  "status": 1,
+  "Time": "9:28"
+},
+{
+  "_id": {
+    "$oid": "6524e086adbc80248e60cf7c"
+  },
+  "RollNo": "20a91a05l3",
+  "Name": "yash",
+  "Batch": "Morning",
+  "Course": "Devops",
+  "status": 0,
+  "Time": "NA"
+}]
